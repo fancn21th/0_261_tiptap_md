@@ -2,8 +2,21 @@
 
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import TurndownService from "turndown";
+import MarkdownIt from "markdown-it";
+import { useRef } from "react";
 
 const TiptapEditor = () => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // 初始化 Markdown 转换工具
+  const turndownService = new TurndownService({
+    headingStyle: "atx",
+    codeBlockStyle: "fenced",
+  });
+
+  const md = new MarkdownIt();
+
   const editor = useEditor({
     extensions: [StarterKit],
     immediatelyRender: false,
@@ -25,6 +38,46 @@ const TiptapEditor = () => {
       },
     },
   });
+
+  // 导出为 Markdown
+  const exportToMarkdown = () => {
+    if (!editor) return;
+
+    const html = editor.getHTML();
+    const markdown = turndownService.turndown(html);
+
+    const blob = new Blob([markdown], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `tiptap-document-${new Date().toISOString().split("T")[0]}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  // 导入 Markdown 文件
+  const importFromMarkdown = () => {
+    fileInputRef.current?.click();
+  };
+
+  // 处理文件选择
+  const handleFileImport = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !editor) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const markdown = e.target?.result as string;
+      const html = md.render(markdown);
+      editor.commands.setContent(html);
+    };
+    reader.readAsText(file);
+
+    // 重置文件输入
+    event.target.value = "";
+  };
 
   if (!editor) {
     return null;
@@ -134,8 +187,30 @@ const TiptapEditor = () => {
             >
               引用
             </button>
+            <div className="w-px h-6 bg-gray-300 dark:bg-gray-500 mx-1"></div>
+            <button
+              onClick={importFromMarkdown}
+              className="px-3 py-1 rounded text-sm font-medium transition-colors bg-green-500 text-white hover:bg-green-600"
+            >
+              📁 导入 MD
+            </button>
+            <button
+              onClick={exportToMarkdown}
+              className="px-3 py-1 rounded text-sm font-medium transition-colors bg-blue-500 text-white hover:bg-blue-600"
+            >
+              💾 导出 MD
+            </button>
           </div>
         </div>
+
+        {/* 隐藏的文件输入 */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".md,.markdown,.txt"
+          onChange={handleFileImport}
+          style={{ display: "none" }}
+        />
 
         {/* 编辑器内容 */}
         <div className="p-4 min-h-[300px]">

@@ -17,6 +17,8 @@
 - 📝 列表支持（有序列表、无序列表）
 - 💬 引用块
 - 🎨 响应式工具栏
+- 📁 **Markdown 导入** - 支持导入 .md 文件
+- 💾 **Markdown 导出** - 支持导出为 .md 文件
 
 ## 快速开始
 
@@ -33,6 +35,25 @@ npm run dev
 ```
 
 3. 打开浏览器访问 [http://localhost:3000](http://localhost:3000)
+
+## Markdown 导入导出功能
+
+### 测试导入功能
+1. 项目根目录提供了一个 `example.md` 示例文件
+2. 点击编辑器工具栏中的"📁 导入 MD"按钮
+3. 选择 `example.md` 文件即可导入内容
+
+### 测试导出功能
+1. 在编辑器中输入或编辑内容
+2. 点击工具栏中的"💾 导出 MD"按钮
+3. 文件会自动下载到本地，文件名格式为：`tiptap-document-YYYY-MM-DD.md`
+
+### 支持的 Markdown 格式
+- 标题 (H1-H6)
+- 粗体、斜体、删除线
+- 有序列表和无序列表
+- 引用块
+- 内联代码（部分支持）
 
 ## 项目结构
 
@@ -53,6 +74,9 @@ src/
 - **样式**: Tailwind CSS 4
 - **语言**: TypeScript
 - **包管理**: npm
+- **Markdown 处理**:
+  - `turndown` - HTML 转 Markdown
+  - `markdown-it` - Markdown 转 HTML
 
 ## 部署
 

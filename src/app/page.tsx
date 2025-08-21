@@ -29,13 +29,32 @@ export default function Home() {
         {/* Instructions */}
         <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 mb-8">
           <h2 className="text-xl font-semibold mb-4">使用说明</h2>
-          <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-            <li>• 使用工具栏按钮来格式化文本</li>
-            <li>• 支持粗体、斜体、删除线等基本格式</li>
-            <li>• 可以创建不同级别的标题 (H1, H2, H3)</li>
-            <li>• 支持无序列表、有序列表和引用块</li>
-            <li>• 直接在编辑器中输入文本即可开始编辑</li>
-          </ul>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="font-semibold mb-2">编辑功能</h3>
+              <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                <li>• 使用工具栏按钮来格式化文本</li>
+                <li>• 支持粗体、斜体、删除线等基本格式</li>
+                <li>• 可以创建不同级别的标题 (H1, H2, H3)</li>
+                <li>• 支持无序列表、有序列表和引用块</li>
+                <li>• 直接在编辑器中输入文本即可开始编辑</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-2">导入导出功能</h3>
+              <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                <li>
+                  • 📁 <strong>导入 MD</strong>：点击按钮选择 .md 文件导入
+                </li>
+                <li>
+                  • 💾 <strong>导出 MD</strong>：将当前内容导出为 Markdown 文件
+                </li>
+                <li>• 支持标准 Markdown 格式</li>
+                <li>• 可以导入项目根目录的 example.md 文件进行测试</li>
+                <li>• 导出的文件会自动下载到本地</li>
+              </ul>
+            </div>
+          </div>
         </div>
 
         {/* Footer Links */}
