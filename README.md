@@ -17,8 +17,10 @@
 - 📝 列表支持（有序列表、无序列表）
 - 💬 引用块
 - 🎨 响应式工具栏
-- 📁 **Markdown 导入** - 支持导入 .md 文件
-- 💾 **Markdown 导出** - 支持导出为 .md 文件
+- 📁 **Markdown 导入** - 支持导入 .md 文件（使用专业插件）
+- 💾 **Markdown 导出** - 支持导出为 .md 文件（使用专业插件）
+- 🔄 **实时 Markdown 转换** - 粘贴时自动转换 Markdown
+- 🚀 **直接解析** - 无中间 HTML 转换，保持数据完整性
 
 ## 快速开始
 
@@ -63,9 +65,39 @@ src/
 │   ├── globals.css          # 全局样式
 │   ├── layout.tsx           # 根布局
 │   └── page.tsx             # 主页面
-└── components/
-    └── TiptapEditor.tsx     # Tiptap 编辑器组件
+├── components/
+│   └── TiptapEditor.tsx     # Tiptap 编辑器组件
+└── extensions/
+    └── markdown/            # 专业 Markdown 插件系统
+        ├── markdown.extension.ts    # 主扩展
+        ├── extensions/
+        │   └── clipboard.ts         # 剪贴板处理
+        ├── parser/
+        │   └── index.ts            # Markdown 解析器
+        ├── serializer/
+        │   └── index.ts            # Markdown 序列化器
+        ├── plugins/
+        │   ├── echarts.plugin.ts   # ECharts 图表支持
+        │   ├── katex.plugin.ts     # KaTeX 数学公式
+        │   └── table.plugin.ts     # 表格增强
+        └── utils/
+            └── mapping.ts          # 节点映射关系
 ```
+
+## 🏗️ Markdown 插件系统架构
+
+### 核心优势
+- **直接转换**: Markdown ↔ Tiptap 节点（无 HTML 中介）
+- **精确映射**: 通过 mapping.ts 精确定义语法对应关系
+- **原生集成**: 作为 Tiptap Extension 深度集成
+- **插件化**: 支持数学公式、图表、表格等扩展功能
+- **实时处理**: 支持粘贴时自动 Markdown 转换
+
+### 插件功能
+- **clipboard.ts**: 智能剪贴板，支持 Markdown 粘贴和复制
+- **parser/**: 直接解析 Markdown 到 Tiptap 节点结构
+- **serializer/**: 直接序列化 Tiptap 节点到 Markdown
+- **plugins/**: 扩展插件（数学公式、图表、表格）
 
 ## 技术栈
 
@@ -75,10 +107,10 @@ src/
 - **语言**: TypeScript
 - **包管理**: npm
 - **Markdown 处理**:
-  - `turndown` - HTML 转 Markdown
-  - `markdown-it` - Markdown 转 HTML
-
-## 部署
+  - **专业插件系统** - 基于 Tiptap Extension
+  - `@tiptap/pm/markdown` - 官方 Markdown 解析器
+  - **直接转换** - Markdown ↔ Tiptap（无中间 HTML）
+  - **扩展插件**: KaTeX 数学公式、ECharts 图表、增强表格## 部署
 
 最简单的部署方式是使用 [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme)。
 

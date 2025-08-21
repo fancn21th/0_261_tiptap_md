@@ -2,23 +2,20 @@
 
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import TurndownService from "turndown";
-import MarkdownIt from "markdown-it";
+import { MarkdownExtension } from "@/extensions/markdown";
 import { useRef } from "react";
 
 const TiptapEditor = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // 初始化 Markdown 转换工具
-  const turndownService = new TurndownService({
-    headingStyle: "atx",
-    codeBlockStyle: "fenced",
-  });
-
-  const md = new MarkdownIt();
-
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [
+      StarterKit,
+      MarkdownExtension.configure({
+        transformPastedText: true,
+        transformCopiedText: true,
+      }),
+    ],
     immediatelyRender: false,
     content: `
       <h2>欢迎使用 Tiptap 编辑器!</h2>
@@ -39,12 +36,11 @@ const TiptapEditor = () => {
     },
   });
 
-  // 导出为 Markdown
+  // 导出为 Markdown - 使用插件方法
   const exportToMarkdown = () => {
     if (!editor) return;
 
-    const html = editor.getHTML();
-    const markdown = turndownService.turndown(html);
+    const markdown = editor.storage.markdown.getMarkdown();
 
     const blob = new Blob([markdown], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
@@ -57,12 +53,12 @@ const TiptapEditor = () => {
     URL.revokeObjectURL(url);
   };
 
-  // 导入 Markdown 文件
+  // 导入 Markdown 文件 - 使用插件方法
   const importFromMarkdown = () => {
     fileInputRef.current?.click();
   };
 
-  // 处理文件选择
+  // 处理文件选择 - 使用插件方法
   const handleFileImport = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file || !editor) return;
@@ -70,8 +66,8 @@ const TiptapEditor = () => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const markdown = e.target?.result as string;
-      const html = md.render(markdown);
-      editor.commands.setContent(html);
+      // 使用插件的 setContent 方法直接设置 Markdown 内容
+      editor.commands.setContent(markdown);
     };
     reader.readAsText(file);
 
