@@ -2,7 +2,7 @@
 
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Image } from '@tiptap/extension-image'
+import { Image } from "@tiptap/extension-image";
 import { MarkdownExtension } from "@/extensions/markdown";
 import { useRef } from "react";
 
@@ -12,16 +12,14 @@ const TiptapEditor = () => {
   const editor = useEditor({
     extensions: [
       StarterKit,
-        Image.configure({ inline: true }),
+      Image.configure({ inline: true }),
       MarkdownExtension.configure({
         transformPastedText: true,
         transformCopiedText: true,
       }),
     ],
     immediatelyRender: false,
-    content: `
-      
-    `,
+    content: ``,
     editorProps: {
       attributes: {
         class: "focus:outline-none",
