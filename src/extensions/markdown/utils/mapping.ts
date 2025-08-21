@@ -19,6 +19,7 @@ export const MarkMapping: Record<
     let isBoldToo = false;
 
     // Check if the node being wrapped also has a bold mark, if so, we need to use the bold markdown syntax
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (node?.marks.some((m: any) => m.type.name === "bold")) {
       isBoldToo = true;
     }
@@ -72,6 +73,7 @@ export const NodeMapping: Record<
     if (parent?.type.name === "orderedList") {
       let number = parent.attrs.start || 1;
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       parent.forEach((parentChild: any, _offset: any, index: any) => {
         if (node === parentChild) {
           number = index + 1;
