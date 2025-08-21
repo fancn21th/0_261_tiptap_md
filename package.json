@@ -16,6 +16,7 @@
     "@tiptap/extension-document": "3.2.0",
     "@tiptap/extension-hard-break": "3.2.0",
     "@tiptap/extension-heading": "3.2.0",
+    "@tiptap/extension-image": "^3.2.0",
     "@tiptap/extension-italic": "3.2.0",
     "@tiptap/extension-list-item": "3.2.0",
     "@tiptap/extension-ordered-list": "3.2.0",

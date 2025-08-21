@@ -2,6 +2,7 @@
 
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { Image } from '@tiptap/extension-image'
 import { MarkdownExtension } from "@/extensions/markdown";
 import { useRef } from "react";
 
@@ -11,6 +12,7 @@ const TiptapEditor = () => {
   const editor = useEditor({
     extensions: [
       StarterKit,
+        Image.configure({ inline: true }),
       MarkdownExtension.configure({
         transformPastedText: true,
         transformCopiedText: true,
@@ -18,16 +20,7 @@ const TiptapEditor = () => {
     ],
     immediatelyRender: false,
     content: `
-      <h2>欢迎使用 Tiptap 编辑器!</h2>
-      <p>这是一个基于 <strong>Tiptap v3</strong> 的富文本编辑器示例。</p>
-      <p>您可以:</p>
-      <ul>
-        <li>使用 <strong>粗体</strong> 和 <em>斜体</em> 文本</li>
-        <li>创建列表</li>
-        <li>添加标题</li>
-        <li>插入链接</li>
-      </ul>
-      <p>试试看编辑这段文本吧！</p>
+      
     `,
     editorProps: {
       attributes: {

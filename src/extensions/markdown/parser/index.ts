@@ -25,48 +25,48 @@ const tokens: Record<string, ParseSpec> = {
   },
   hr: { node: "horizontalRule" },
   hardbreak: { node: "hardBreak" },
-  math_inline: {
-    node: "inlineMath",
-    getAttrs: (tok) => ({ latex: tok.attrGet("latex") }),
-  },
-  math_block: {
-    block: "blockMath",
-    getAttrs: (tok) => ({ latex: tok.attrGet("latex") }),
-    noCloseToken: true,
-  },
-  echarts_block: {
-    block: "chart",
-    getAttrs: (tok) => ({
-      options: tok.attrGet("options"),
-    }),
-    noCloseToken: true,
-  },
-  table: {
-    block: "table",
-  },
-  thead: {
-    ignore: true,
-  },
-  tbody: {
-    ignore: true,
-  },
-  tr: {
-    block: "tableRow",
-  },
-  td: {
-    block: "tableCell",
-    getAttrs: (tok) => ({
-      colspan: parseInt(tok.attrGet("colspan") || "1", 10),
-      rowspan: parseInt(tok.attrGet("rowspan") || "1", 10),
-    }),
-  },
-  th: {
-    block: "tableHeader",
-    getAttrs: (tok) => ({
-      colspan: parseInt(tok.attrGet("colspan") || "1", 10),
-      rowspan: parseInt(tok.attrGet("rowspan") || "1", 10),
-    }),
-  },
+  // math_inline: {
+  //   node: "inlineMath",
+  //   getAttrs: (tok) => ({ latex: tok.attrGet("latex") }),
+  // },
+  // math_block: {
+  //   block: "blockMath",
+  //   getAttrs: (tok) => ({ latex: tok.attrGet("latex") }),
+  //   noCloseToken: true,
+  // },
+  // echarts_block: {
+  //   block: "chart",
+  //   getAttrs: (tok) => ({
+  //     options: tok.attrGet("options"),
+  //   }),
+  //   noCloseToken: true,
+  // },
+  // table: {
+  //   block: "table",
+  // },
+  // thead: {
+  //   ignore: true,
+  // },
+  // tbody: {
+  //   ignore: true,
+  // },
+  // tr: {
+  //   block: "tableRow",
+  // },
+  // td: {
+  //   block: "tableCell",
+  //   getAttrs: (tok) => ({
+  //     colspan: parseInt(tok.attrGet("colspan") || "1", 10),
+  //     rowspan: parseInt(tok.attrGet("rowspan") || "1", 10),
+  //   }),
+  // },
+  // th: {
+  //   block: "tableHeader",
+  //   getAttrs: (tok) => ({
+  //     colspan: parseInt(tok.attrGet("colspan") || "1", 10),
+  //     rowspan: parseInt(tok.attrGet("rowspan") || "1", 10),
+  //   }),
+  // },
 
   strong: { mark: "bold" },
   em: { mark: "italic" },
