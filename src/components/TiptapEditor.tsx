@@ -5,6 +5,7 @@ import StarterKit from "@tiptap/starter-kit";
 import { Image } from "@tiptap/extension-image";
 import { MarkdownExtension } from "@/extensions/markdown";
 import { HighlightExtension } from "@/extensions/highlight";
+import { TableKit } from "@tiptap/extension-table";
 import { SearchResult } from "@/extensions/highlight/types";
 import { useRef, useState, useEffect, useCallback } from "react";
 
@@ -22,13 +23,14 @@ const TiptapEditor = () => {
   const editor = useEditor({
     extensions: [
       StarterKit,
+      TableKit,
       Image.configure({ inline: true }),
       MarkdownExtension.configure({
         transformPastedText: true,
         transformCopiedText: true,
       }),
       HighlightExtension.configure({
-        defaultColor: '#ffeb3b',
+        defaultColor: "#ffeb3b",
         caseSensitive: false,
         wholeWord: false,
         singleHighlightMode: false,
@@ -51,7 +53,9 @@ const TiptapEditor = () => {
     if (!editor || !searchText.trim()) return;
 
     // 更新扩展配置
-    const highlightExt = editor.extensionManager.extensions.find(ext => ext.name === 'highlight');
+    const highlightExt = editor.extensionManager.extensions.find(
+      (ext) => ext.name === "highlight"
+    );
     if (highlightExt) {
       highlightExt.options.caseSensitive = searchOptions.caseSensitive;
       highlightExt.options.wholeWord = searchOptions.wholeWord;
@@ -60,14 +64,14 @@ const TiptapEditor = () => {
     editor.commands.findText(searchText, (matches) => {
       setSearchResults(matches);
       setCurrentResultIndex(0);
-      
+
       // 高亮所有结果
       matches.forEach((match, index) => {
         editor.commands.highlightRange(
           match.from,
           match.to,
           `search-result-${index}`,
-          index === 0 ? '#ff9800' : '#ffeb3b' // 当前结果用不同颜色
+          index === 0 ? "#ff9800" : "#ffeb3b" // 当前结果用不同颜色
         );
       });
     });
@@ -84,17 +88,17 @@ const TiptapEditor = () => {
   // 导航到下一个结果
   const nextResult = useCallback(() => {
     if (searchResults.length === 0) return;
-    
+
     const newIndex = (currentResultIndex + 1) % searchResults.length;
     setCurrentResultIndex(newIndex);
-    
+
     // 重新高亮当前结果
     searchResults.forEach((match, index) => {
       editor?.commands.highlightRange(
         match.from,
         match.to,
         `search-result-${index}`,
-        index === newIndex ? '#ff9800' : '#ffeb3b'
+        index === newIndex ? "#ff9800" : "#ffeb3b"
       );
     });
   }, [searchResults, currentResultIndex, editor]);
@@ -102,17 +106,20 @@ const TiptapEditor = () => {
   // 导航到上一个结果
   const prevResult = useCallback(() => {
     if (searchResults.length === 0) return;
-    
-    const newIndex = currentResultIndex === 0 ? searchResults.length - 1 : currentResultIndex - 1;
+
+    const newIndex =
+      currentResultIndex === 0
+        ? searchResults.length - 1
+        : currentResultIndex - 1;
     setCurrentResultIndex(newIndex);
-    
+
     // 重新高亮当前结果
     searchResults.forEach((match, index) => {
       editor?.commands.highlightRange(
         match.from,
         match.to,
         `search-result-${index}`,
-        index === newIndex ? '#ff9800' : '#ffeb3b'
+        index === newIndex ? "#ff9800" : "#ffeb3b"
       );
     });
   }, [searchResults, currentResultIndex, editor]);
@@ -121,32 +128,34 @@ const TiptapEditor = () => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       // Ctrl/Cmd + F 打开搜索
-      if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
+      if ((event.ctrlKey || event.metaKey) && event.key === "f") {
         event.preventDefault();
-        const searchInput = document.querySelector('input[placeholder="搜索文本..."]') as HTMLInputElement;
+        const searchInput = document.querySelector(
+          'input[placeholder="搜索文本..."]'
+        ) as HTMLInputElement;
         searchInput?.focus();
       }
-      
+
       // F3 或 Enter 下一个结果
-      if (event.key === 'F3' && searchResults.length > 0) {
+      if (event.key === "F3" && searchResults.length > 0) {
         event.preventDefault();
         nextResult();
       }
-      
+
       // Shift + F3 上一个结果
-      if (event.shiftKey && event.key === 'F3') {
+      if (event.shiftKey && event.key === "F3") {
         event.preventDefault();
         prevResult();
       }
-      
+
       // Escape 清除高亮
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         clearHighlights();
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [searchResults, nextResult, prevResult, clearHighlights]);
 
   // 导出为 Markdown - 使用插件方法
@@ -156,9 +165,10 @@ const TiptapEditor = () => {
     // 尝试获取带高亮的 Markdown
     editor.commands.getMarkdownWithHighlights();
     const markdownWithHighlights = editor.storage.highlight?.lastMarkdownResult;
-    
+
     // 如果有高亮内容，优先使用带高亮的版本，否则使用普通版本
-    const markdown = markdownWithHighlights || editor.storage.markdown.getMarkdown();
+    const markdown =
+      markdownWithHighlights || editor.storage.markdown.getMarkdown();
 
     const blob = new Blob([markdown], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
@@ -325,7 +335,7 @@ const TiptapEditor = () => {
               💾 导出 MD
             </button>
           </div>
-          
+
           {/* 搜索栏 */}
           <div className="space-y-2">
             <div className="flex gap-2 items-center">
@@ -333,7 +343,7 @@ const TiptapEditor = () => {
                 type="text"
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 placeholder="搜索文本..."
                 className="px-3 py-1 border border-gray-300 dark:border-gray-500 rounded text-sm flex-1 max-w-xs dark:bg-gray-700 dark:text-white"
               />
@@ -385,10 +395,12 @@ const TiptapEditor = () => {
                   <input
                     type="checkbox"
                     checked={searchOptions.caseSensitive}
-                    onChange={(e) => setSearchOptions(prev => ({
-                      ...prev,
-                      caseSensitive: e.target.checked
-                    }))}
+                    onChange={(e) =>
+                      setSearchOptions((prev) => ({
+                        ...prev,
+                        caseSensitive: e.target.checked,
+                      }))
+                    }
                   />
                   区分大小写
                 </label>
@@ -396,10 +408,12 @@ const TiptapEditor = () => {
                   <input
                     type="checkbox"
                     checked={searchOptions.wholeWord}
-                    onChange={(e) => setSearchOptions(prev => ({
-                      ...prev,
-                      wholeWord: e.target.checked
-                    }))}
+                    onChange={(e) =>
+                      setSearchOptions((prev) => ({
+                        ...prev,
+                        wholeWord: e.target.checked,
+                      }))
+                    }
                   />
                   全词匹配
                 </label>

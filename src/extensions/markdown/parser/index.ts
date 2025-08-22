@@ -41,32 +41,32 @@ const tokens: Record<string, ParseSpec> = {
   //   }),
   //   noCloseToken: true,
   // },
-  // table: {
-  //   block: "table",
-  // },
-  // thead: {
-  //   ignore: true,
-  // },
-  // tbody: {
-  //   ignore: true,
-  // },
-  // tr: {
-  //   block: "tableRow",
-  // },
-  // td: {
-  //   block: "tableCell",
-  //   getAttrs: (tok) => ({
-  //     colspan: parseInt(tok.attrGet("colspan") || "1", 10),
-  //     rowspan: parseInt(tok.attrGet("rowspan") || "1", 10),
-  //   }),
-  // },
-  // th: {
-  //   block: "tableHeader",
-  //   getAttrs: (tok) => ({
-  //     colspan: parseInt(tok.attrGet("colspan") || "1", 10),
-  //     rowspan: parseInt(tok.attrGet("rowspan") || "1", 10),
-  //   }),
-  // },
+  table: {
+    block: "table",
+  },
+  thead: {
+    ignore: true,
+  },
+  tbody: {
+    ignore: true,
+  },
+  tr: {
+    block: "tableRow",
+  },
+  td: {
+    block: "tableCell",
+    getAttrs: (tok) => ({
+      colspan: parseInt(tok.attrGet("colspan") || "1", 10),
+      rowspan: parseInt(tok.attrGet("rowspan") || "1", 10),
+    }),
+  },
+  th: {
+    block: "tableHeader",
+    getAttrs: (tok) => ({
+      colspan: parseInt(tok.attrGet("colspan") || "1", 10),
+      rowspan: parseInt(tok.attrGet("rowspan") || "1", 10),
+    }),
+  },
 
   strong: { mark: "bold" },
   em: { mark: "italic" },
