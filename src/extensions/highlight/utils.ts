@@ -1,5 +1,10 @@
-import { SearchResult } from './types';
-import { Node } from '@tiptap/pm/model';
+import { SearchResult } from "./types";
+import { Node } from "@tiptap/pm/model";
+
+// 清理文本，去掉非中文、英文和数字的字符
+function sanitizeText(text: string): string {
+  return text.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, "");
+}
 
 /**
  * Search for text in the editor content
@@ -16,7 +21,7 @@ export function searchText(
 
   const { caseSensitive = false, wholeWord = false } = options;
   const results: SearchResult[] = [];
-  
+
   const searchContent = caseSensitive ? content : content.toLowerCase();
   let searchFor = caseSensitive ? searchTerm : searchTerm.toLowerCase();
 
@@ -26,7 +31,9 @@ export function searchText(
     searchFor = escapeRegExp(searchFor);
   }
 
-  const regex = new RegExp(searchFor, 'g');
+  searchFor = sanitizeText(searchFor);
+
+  const regex = new RegExp(searchFor, "g");
   let match;
 
   while ((match = regex.exec(searchContent)) !== null) {
@@ -44,7 +51,7 @@ export function searchText(
  * Escape special regex characters
  */
 function escapeRegExp(string: string): string {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 /**
@@ -60,24 +67,46 @@ export function findTextRanges(
 ): SearchResult[] {
   const results: SearchResult[] = [];
   const textContent = doc.textContent;
-  
+
   const searchResults = searchText(textContent, searchTerm, options);
-  
+
   // Convert text positions to document positions
   let textPos = 0;
-  
+
   doc.descendants((node: Node, pos: number) => {
     if (node.isText) {
-      const nodeText = node.text || '';
+      const nodeText = node.text || "";
       const nodeStart = textPos;
       const nodeEnd = textPos + nodeText.length;
-      
+
       // Check if any search results fall within this text node
-      searchResults.forEach(result => {
+      searchResults.forEach((result) => {
         if (result.from >= nodeStart && result.to <= nodeEnd) {
           const relativeFrom = result.from - nodeStart;
           const relativeTo = result.to - nodeStart;
-          
+
+          results.push({
+            from: pos + relativeFrom,
+            to: pos + relativeTo,
+            text: result.text,
+          });
+        }
+        if (result.from < nodeEnd && result.to > nodeStart) {
+          // Partial match across node boundaries
+          const relativeFrom = Math.max(result.from - nodeStart, 0);
+          const relativeTo = Math.min(result.to - nodeStart, nodeText.length);
+
+          results.push({
+            from: pos + relativeFrom,
+            to: pos + relativeTo,
+            text: result.text,
+          });
+        }
+        if (result.from < nodeEnd && result.to > nodeStart) {
+          // Partial match across node boundaries
+          const relativeFrom = Math.max(result.from - nodeStart, 0);
+          const relativeTo = Math.min(result.to - nodeStart, nodeText.length);
+
           results.push({
             from: pos + relativeFrom,
             to: pos + relativeTo,
@@ -85,12 +114,12 @@ export function findTextRanges(
           });
         }
       });
-      
+
       textPos += nodeText.length;
     }
     return true;
   });
-  
+
   return results;
 }
 
@@ -106,8 +135,8 @@ export function generateHighlightId(): string {
  */
 export function scrollToElement(element: Element, smooth = true): void {
   element.scrollIntoView({
-    behavior: smooth ? 'smooth' : 'auto',
-    block: 'center',
-    inline: 'nearest',
+    behavior: smooth ? "smooth" : "auto",
+    block: "center",
+    inline: "nearest",
   });
 }
